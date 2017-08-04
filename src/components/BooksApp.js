@@ -40,7 +40,11 @@ class BooksApp extends Component {
               />
             }}
           />
-          <Route path="/search" component={Search} />
+          <Route path="/search"
+            render={() => {
+              return <Search refreshData={this.refreshData} />
+            }}
+          />
         </div>
       </BrowserRouter>
     );

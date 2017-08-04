@@ -5,7 +5,7 @@ import Changer from './Changer';
 class Book extends Component {
   render() {
     const {
-      id, title, authors, backgroundImageURL, section, refreshData
+      id, title, authors, backgroundImageURL, shelf, refreshData
     } = this.props;
     const coverStyle = {
       width: 128,
@@ -17,7 +17,7 @@ class Book extends Component {
       <div className="book">
         <div className="book-top">
           <div className="book-cover" style={coverStyle} />
-          <Changer section={section} bookId={id} refreshData={refreshData} />
+          <Changer shelf={shelf} bookId={id} refreshData={refreshData} />
         </div>
         <div className="book-title">{title}</div>
         <div className="book-authors">
@@ -33,7 +33,7 @@ Book.propTypes = {
   authors: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.arrayOf(PropTypes.string)
-  ]).isRequired,
+  ]),
   backgroundImageURL: PropTypes.string.isRequired
 };
 

@@ -3,16 +3,6 @@ import PropTypes from 'prop-types';
 import Halogen from 'halogen';
 import api from '../api/WrappedBookAPI';
 
-const spinnerStyle = {
-    width: '40px',
-    height: '40px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingBottom: '4px',
-    opacity: 0.5
-};
-
 class Changer extends Component {
   constructor(props) {
     super(props);
@@ -44,29 +34,32 @@ class Changer extends Component {
   }
 
   renderDropDown() {
-    const { section } = this.props;
+    const { shelf } = this.props;
     return (
       <div className="book-shelf-changer">
-        <select value={section} onChange={this.handleChange}>
+        <select value={shelf} onChange={this.handleChange}>
           <option value="none" disabled>Move to...</option>
           <option value="currentlyReading">Currently Reading</option>
           <option value="wantToRead">Want to Read</option>
           <option value="read">Read</option>
-          <option value="none">None</option>
+          {
+            shelf === 'none'
+            ? null
+            : <option value="none" style={{ color: 'red' }}>Remove</option>
+          }
         </select>
       </div>
     );
   }
 
   render() {
-    const { section, bookId } = this.props;
     return this.state.waiting ? this.renderSpinner() : this.renderDropDown();
   }
 };
 
 Changer.propTypes = {
   bookId: PropTypes.string.isRequired,
-  section: PropTypes.oneOf(['currentlyReading', 'wantToRead', 'read']).isRequired,
+  shelf: PropTypes.oneOf(['currentlyReading', 'wantToRead', 'read', 'none']).isRequired,
   refreshData: PropTypes.func.isRequired
 };
 

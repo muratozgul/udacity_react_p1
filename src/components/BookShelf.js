@@ -10,17 +10,17 @@ const TITLES = {
 
 class BookShelf extends Component {
   render() {
-    const { section, title, books, refreshData } = this.props;
+    const { shelf, title, books, refreshData } = this.props;
     return (
       <div className="bookshelf">
-        <h2 className="bookshelf-title">{TITLES[section]}</h2>
+        <h2 className="bookshelf-title">{TITLES[shelf]}</h2>
         <div className="bookshelf-books">
           <ol className="books-grid">
             {
               books.map(book => {
                 return (
                   <li key={book.id}>
-                    <Book section={section} refreshData={refreshData} {...book} />
+                    <Book refreshData={refreshData} {...book} />
                   </li>
                 );
               })
@@ -33,7 +33,7 @@ class BookShelf extends Component {
 };
 
 BookShelf.propTypes = {
-  section: PropTypes.oneOf(['currentlyReading', 'wantToRead', 'read']).isRequired,
+  shelf: PropTypes.oneOf(['currentlyReading', 'wantToRead', 'read']).isRequired,
   books: PropTypes.arrayOf(PropTypes.object)
 };
 

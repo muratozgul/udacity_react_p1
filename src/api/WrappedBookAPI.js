@@ -33,8 +33,13 @@ const update = (bookId, shelf) => {
 };
 
 const search = (query, maxResults) => {
-  return BooksAPI.search(query, maxResults).then(books => {
-    return books.map(book => transformBookData(book));
+  return BooksAPI.search(query, maxResults).then(res => {
+    if (res.error) {
+      return Promise.reject(new Error(res.error));
+    } else {
+      const books = Array.isArray(res) ? res : [];
+      return books.map(book => transformBookData(book));
+    }
   });
 };
 

@@ -15,7 +15,7 @@ class BookCase extends Component {
           <div>
             {
               Object.keys(shelves).map(key => {
-                return <BookShelf key={key} section={key}
+                return <BookShelf key={key} shelf={key}
                   books={shelves[key]} refreshData={refreshData}
                 />;
               })
