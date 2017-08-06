@@ -1,11 +1,34 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import api from '../api/WrappedBookAPI';
 import BookShelf from './BookShelf';
 
 class BookCase extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      shelves: {
+        currentlyReading: [],
+        wantToRead: [],
+        read: []
+      }
+    };
+  }
+
+  componentDidMount() {
+    this.refreshData();
+  }
+
+  refreshData = () => {
+    api.getAll().then(shelves => {
+      this.setState({shelves});
+    });
+  }
+
   render() {
-    const { title, shelves, refreshData } = this.props;
+    const { title } = this.props;
+    const { shelves } = this.state;
     return (
       <div className="list-books">
         <div className="list-books-title">
@@ -16,7 +39,7 @@ class BookCase extends Component {
             {
               Object.keys(shelves).map(key => {
                 return <BookShelf key={key} shelf={key}
-                  books={shelves[key]} refreshData={refreshData}
+                  books={shelves[key]} refreshData={this.refreshData}
                 />;
               })
             }

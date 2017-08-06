@@ -27,11 +27,7 @@ class Search extends Component {
   }
 
   componentDidMount() {
-    const search = this.props.location.search;
-    if (search) {
-      const query = qs.parse(search, { ignoreQueryPrefix: true }).query;
-      this.search(query);
-    }
+    this.search();
   }
 
   _handleChange = (value) => {
@@ -39,7 +35,12 @@ class Search extends Component {
     this.search(value);
   }
 
-  search(query) {
+  search = () => {
+    const search = this.props.location.search;
+    if (!search) {
+      return;
+    }
+    const query = qs.parse(search, { ignoreQueryPrefix: true }).query;
     this.setState({ waiting: true, error: null });
     api.search(query, 20)
       .then(results => {
@@ -58,7 +59,11 @@ class Search extends Component {
             this.state.results.map(book => {
               return (
                 <li key={book.id}>
-                  <Book refreshData={this.props.refreshData} {...book} />
+                  <Book
+                    refreshData={this.search}
+                    highlight={book.shelf !== 'none'}
+                    {...book}
+                  />
                 </li>
               );
             })

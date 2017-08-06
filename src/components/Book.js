@@ -5,8 +5,9 @@ import Changer from './Changer';
 class Book extends Component {
   render() {
     const {
-      id, title, authors, backgroundImageURL, shelf, refreshData
+      id, title, authors, backgroundImageURL, shelf, refreshData, highlight
     } = this.props;
+
     const coverStyle = {
       width: 128,
       height: 193,
@@ -18,6 +19,7 @@ class Book extends Component {
         <div className="book-top">
           <div className="book-cover" style={coverStyle} />
           <Changer shelf={shelf} bookId={id} refreshData={refreshData} />
+          { highlight ? <div className="book-highlight-icon" /> : null }
         </div>
         <div className="book-title">{title}</div>
         <div className="book-authors">

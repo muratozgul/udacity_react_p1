@@ -10,7 +10,7 @@ const TITLES = {
 
 class BookShelf extends Component {
   render() {
-    const { shelf, title, books, refreshData } = this.props;
+    const { shelf, books, refreshData } = this.props;
     return (
       <div className="bookshelf">
         <h2 className="bookshelf-title">{TITLES[shelf]}</h2>

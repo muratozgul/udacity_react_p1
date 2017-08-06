@@ -10,6 +10,36 @@ const transformBookData = (data) => {
   };
 };
 
+const removeDuplicateBooks = (books) => {
+  // need this because sometimes back-end returns same book twice
+  // (if it is already added to a shelf)
+  const validShelves = ['currentlyReading', 'wantToRead', 'read'];
+  const existingBooks = books.filter(book => {
+    return validShelves.indexOf(book.shelf) > -1;
+  });
+  const nonExistingBooks = books.filter(book => {
+    return !existingBooks.find(existingBook => existingBook.id === book.id);
+  });
+  return existingBooks.concat(nonExistingBooks);
+};
+
+const doubleCheckAgainstGetAllAPI = (books) => {
+  // Bug: backend is not updating 'shelf' on search results
+  const existingBooksMap = {};
+  return BooksAPI.getAll()
+    .then(existingBooks => {
+      existingBooks.forEach(book => {
+        existingBooksMap[book.id] = book.shelf;
+      });
+    })
+    .then(() => {
+      return books.map(book => {
+        const shelf = existingBooksMap[book.id];
+        return shelf ? { ...book, shelf } : book;
+      });
+    });
+};
+
 const get = (bookId) => {
   return BooksAPI.get(bookId).then(book => transformBookData(book));
 };
@@ -38,7 +68,10 @@ const search = (query, maxResults) => {
       return Promise.reject(new Error(res.error));
     } else {
       const books = Array.isArray(res) ? res : [];
-      return books.map(book => transformBookData(book));
+      // return removeDuplicateBooks(books.map(book => transformBookData(book)));
+      return doubleCheckAgainstGetAllAPI(
+        removeDuplicateBooks(books.map(book => transformBookData(book)))
+      );
     }
   });
 };
